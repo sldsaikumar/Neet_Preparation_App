@@ -12,3 +12,5 @@ Mock Exam :
 Question Bank :
 <img width="1839" height="872" alt="Screenshot 2025-08-15 153943" src="https://github.com/user-attachments/assets/c7fb6015-b591-4635-a0a8-43ce53ded8dc" />
 
+Exam Section with Multiple Choice Questions With Neet model of timing and Score System :
+<img width="1841" height="868" alt="Screenshot 2025-08-15 154106" src="https://github.com/user-attachments/assets/8f2ca47b-224e-4b95-b353-07853e2b56f8" />
