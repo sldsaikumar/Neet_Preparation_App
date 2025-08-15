@@ -18,3 +18,5 @@ Exam Section with Multiple Choice Questions With Neet model of timing and Score 
 Results :
 <img width="1836" height="862" alt="Screenshot 2025-08-15 154146" src="https://github.com/user-attachments/assets/4ab6f785-a204-41e7-8292-1901ae4e1045" />
 
+Stats / Performance of the student : 
+<img width="1840" height="870" alt="Screenshot 2025-08-15 154224" src="https://github.com/user-attachments/assets/b0e524c9-26cd-4e2b-a45d-53e61934892d" />
