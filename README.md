@@ -20,3 +20,6 @@ Results :
 
 Stats / Performance of the student : 
 <img width="1840" height="870" alt="Screenshot 2025-08-15 154224" src="https://github.com/user-attachments/assets/b0e524c9-26cd-4e2b-a45d-53e61934892d" />
+
+
+User Can Add question Banks in JSON Format in the Application itself to get large amount of questions without repeating. 
