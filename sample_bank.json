@@ -1,0 +1,112 @@
+{
+  "about": "Sample NEET 2026-compatible question bank. Mark deleted syllabus items with syllabus:'deleted' to auto-exclude.",
+  "schema": {
+    "id": "string",
+    "subject": "Physics|Chemistry|Biology",
+    "chapter": "string",
+    "level": "easy|medium|hard|toughest",
+    "syllabus": "active|deleted",
+    "q": "string",
+    "options": "[4]",
+    "answer": "0-3",
+    "explanation": "string"
+  },
+  "questions": [
+    {
+      "id": "P-UAM-2",
+      "subject": "Physics",
+      "chapter": "Units & Measurements",
+      "level": "medium",
+      "syllabus": "active",
+      "q": "A quantity has unit kg·m²·s⁻³·A⁻¹. The quantity is:",
+      "options": [
+        "Potential difference",
+        "Power",
+        "Energy",
+        "Charge"
+      ],
+      "answer": 0,
+      "explanation": "kg·m²·s⁻³·A⁻¹ corresponds to V (J/C)"
+    },
+    {
+      "id": "P-KIN-1b",
+      "subject": "Physics",
+      "chapter": "Kinematics",
+      "level": "medium",
+      "syllabus": "active",
+      "q": "x=4t³−2t²+3; acceleration at t=2 s is:",
+      "options": [
+        "36 m/s²",
+        "40 m/s²",
+        "44 m/s²",
+        "56 m/s²"
+      ],
+      "answer": 2,
+      "explanation": "a=24t−4 → 44 m/s²"
+    },
+    {
+      "id": "C-ATS-2",
+      "subject": "Chemistry",
+      "chapter": "Atomic Structure",
+      "level": "medium",
+      "syllabus": "active",
+      "q": "For H-atom, energy of nth orbit is proportional to:",
+      "options": [
+        "n",
+        "1/n",
+        "1/n²",
+        "n²"
+      ],
+      "answer": 2,
+      "explanation": "En ∝ −1/n²"
+    },
+    {
+      "id": "C-THD-1",
+      "subject": "Chemistry",
+      "chapter": "Thermodynamics",
+      "level": "hard",
+      "syllabus": "active",
+      "q": "For a spontaneous process at constant T and P, the criterion is:",
+      "options": [
+        "ΔG<0",
+        "ΔS<0",
+        "ΔH>0",
+        "ΔU=0"
+      ],
+      "answer": 0,
+      "explanation": "ΔG must be negative"
+    },
+    {
+      "id": "B-CELL-2",
+      "subject": "Biology",
+      "chapter": "Cell: Structure & Function",
+      "level": "medium",
+      "syllabus": "active",
+      "q": "Peroxisomes contain enzyme:",
+      "options": [
+        "Catalase",
+        "Pepsin",
+        "Amylase",
+        "Trypsin"
+      ],
+      "answer": 0,
+      "explanation": "Catalase decomposes H₂O₂"
+    },
+    {
+      "id": "B-GEN-2",
+      "subject": "Biology",
+      "chapter": "Molecular Basis of Inheritance",
+      "level": "toughest",
+      "syllabus": "active",
+      "q": "In E. coli, σ-factor is required for:",
+      "options": [
+        "Elongation",
+        "Termination",
+        "Promoter recognition",
+        "Proofreading"
+      ],
+      "answer": 2,
+      "explanation": "Promoter recognition"
+    }
+  ]
+}

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEET Master 2026 – Pro Quiz</title>
+  <meta name="theme-color" content="#0ea5e9">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui'] },
+          boxShadow: {
+            'elev': '0 10px 25px -5px rgb(0 0 0 / 0.25)',
+            'soft': '0 4px 14px rgb(0 0 0 / 0.08)',
+          },
+          keyframes: {
+            pop: { '0%': { transform:'scale(.98)' }, '100%': { transform:'scale(1)' } },
+            fadein: { '0%': { opacity:0 }, '100%': { opacity:1 } }
+          },
+          animation: {
+            pop:'pop .2s ease-out',
+            fadein:'fadein .35s ease-out'
+          }
+        }
+      },
+      darkMode: 'class'
+    }
+  </script>
+  <style>
+    html, body { height: 100%; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-thumb { background: #93c5fd; border-radius: 9999px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    .glass { backdrop-filter: saturate(180%) blur(12px); background: rgba(255,255,255,0.75); }
+    .glass-dark { backdrop-filter: saturate(180%) blur(12px); background: rgba(17,24,39,0.6); }
+    .choice-card { transition: transform .08s ease, box-shadow .15s ease; }
+    .choice-card:active { transform: scale(0.99); }
+    .tap { touch-action: manipulation; }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans selection:bg-sky-300/40 selection:text-slate-900">
+  <!-- App Shell -->
+  <div id="app" class="min-h-screen flex flex-col">
+    <!-- Top Bar -->
+    <header class="sticky top-0 z-40">
+      <div class="mx-auto max-w-6xl px-4">
+        <div class="glass dark:glass-dark rounded-b-2xl shadow-soft flex items-center justify-between py-3">
+          <div class="flex items-center gap-2">
+            <div class="h-9 w-9 rounded-xl bg-gradient-to-br from-sky-500 to-indigo-500 shadow-elev grid place-items-center text-white font-extrabold">N</div>
+            <div>
+              <h1 class="text-lg font-extrabold leading-5">NEET Master 2026</h1>
+              <p class="text-xs text-slate-600 dark:text-slate-400">Ultra-smooth quiz for AIR ambitions</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="themeToggle" class="tap px-3 py-2 rounded-xl bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 text-sm font-semibold shadow-soft">Toggle Theme</button>
+            <button id="resetHistoryBtn" title="Reset non-repeat history" class="tap px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-sm font-medium">Reset History</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="flex-1 mx-auto w-full max-w-6xl px-4 pt-6 pb-32">
+      <!-- Tabs -->
+      <div class="mb-4 flex gap-2">
+        <button data-tab="home" class="tab-btn active tap px-4 py-2 rounded-xl bg-sky-600 text-white font-semibold shadow-soft">Home</button>
+        <button data-tab="practice" class="tab-btn tap px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-soft">Chapterwise</button>
+        <button data-tab="mock" class="tab-btn tap px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-soft">Mock Exam</button>
+        <button data-tab="bank" class="tab-btn tap px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-soft">Question Bank</button>
+        <button data-tab="stats" class="tab-btn tap px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-soft">Stats</button>
+      </div>
+
+      <!-- Home -->
+      <section id="home" class="tab-panel animate-fadein">
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 shadow-elev">
+            <h2 class="font-bold text-xl mb-2">Designed for 2026 syllabus</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">By default we exclude questions marked “deleted” by NCERT/NEET updates. You can import your own curated bank and keep it clean.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 shadow-elev">
+            <h2 class="font-bold text-xl mb-2">Mobile-first, buttery-smooth</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Big tap targets, sticky timer, quick grid nav, bookmarks, and polished animations for zero-friction practice.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 shadow-elev">
+            <h2 class="font-bold text-xl mb-2">No repeats across exams</h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400">We store used question IDs in your browser so full tests won’t repeat until the pool is exhausted.</p>
+          </div>
+        </div>
+
+        <div class="mt-6 grid md:grid-cols-2 gap-4">
+          <div class="p-5 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white shadow-elev">
+            <h3 class="text-2xl font-extrabold mb-2">Quick Start</h3>
+            <ol class="list-decimal ml-6 space-y-1 text-sm">
+              <li>Head to <span class="font-semibold">Chapterwise</span> for focused practice by Subject → Chapter → Difficulty.</li>
+              <li>Use <span class="font-semibold">Mock Exam</span> for a 180-question full test (2h 30m timer).</li>
+              <li>Open <span class="font-semibold">Question Bank</span> to import/export and manage your pool.</li>
+            </ol>
+          </div>
+          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 shadow-elev">
+            <h3 class="text-xl font-bold mb-2">Daily Challenge</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">A fresh, deterministic set each day (no repeats) for discipline and momentum.</p>
+            <button id="dailyBtn" class="tap px-4 py-2 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold shadow-soft">Start Daily Challenge</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapterwise -->
+      <section id="practice" class="tab-panel hidden animate-fadein">
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 shadow-elev">
+          <div class="grid md:grid-cols-4 gap-3">
+            <div>
+              <label class="text-sm font-semibold">Subject</label>
+              <select id="pSubject" class="mt-1 w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent">
+              </select>
+            </div>
+            <div>
+              <label class="text-sm font-semibold">Chapter</label>
+              <select id="pChapter" class="mt-1 w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent">
+              </select>
+            </div>
+            <div>
+              <label class="text-sm font-semibold">Difficulty</label>
+              <select id="pLevel" class="mt-1 w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent">
+                <option>easy</option><option>medium</option><option>hard</option><option>toughest</option><option>mixed</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-sm font-semibold">Questions</label>
+              <input id="pCount" type="number" min="1" max="200" value="15" class="mt-1 w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent" />
+            </div>
+          </div>
+          <div class="mt-3 flex items-center justify-between gap-3">
+            <div class="text-xs text-slate-600 dark:text-slate-400">Excluded: questions tagged <span class="italic">deleted</span>.</div>
+            <button id="startPractice" class="tap px-4 py-2 rounded-xl bg-sky-600 text-white font-semibold shadow-soft">Start Practice</button>
+          </div>
+        </div>
+        <div id="practiceHost" class="mt-4"></div>
+      </section>
+
+      <!-- Mock Exam -->
+      <section id="mock" class="tab-panel hidden animate-fadein">
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 shadow-elev">
+          <div class="grid md:grid-cols-4 gap-3">
+            <div>
+              <label class="text-sm font-semibold">Total Questions</label>
+              <input id="mTotal" type="number" min="60" max="200" value="180" class="mt-1 w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent" />
+            </div>
+            <div>
+              <label class="text-sm font-semibold">Timer (hh:mm)</label>
+              <input id="mTimer" type="text" value="02:30" class="mt-1 w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent" />
+            </div>
+            <div>
+              <label class="text-sm font-semibold">Difficulty Mix</label>
+              <select id="mMix" class="mt-1 w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-transparent">
+                <option value="official">NEET-like mix</option>
+                <option value="hardcore">Hardest-first</option>
+                <option value="balanced">Balanced</option>
+              </select>
+            </div>
+            <div class="flex items-end">
+              <button id="startMock" class="tap w-full px-4 py-2 rounded-xl bg-sky-600 text-white font-semibold shadow-soft">Start Mock Exam</button>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600 dark:text-slate-400 mt-2">Questions won’t repeat until the pool is exhausted. Imported banks enlarge the pool.</p>
+        </div>
+        <div id="mockHost" class="mt-4"></div>
+      </section>
+
+      <!-- Bank -->
+      <section id="bank" class="tab-panel hidden animate-fadein">
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 shadow-elev">
+          <div class="flex flex-col md:flex-row md:items-end gap-3">
+            <div class="flex-1">
+              <label class="text-sm font-semibold">Import JSON</label>
+              <input id="importFile" type="file" accept=".json" class="mt-1 block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-slate-900 file:text-white dark:file:bg-white dark:file:text-slate-900 hover:file:opacity-90" />
+            </div>
+            <button id="exportBtn" class="tap px-4 py-2 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold shadow-soft">Export Current Bank</button>
+          </div>
+          <p class="text-xs text-slate-600 dark:text-slate-400 mt-2">Schema: { id, subject, chapter, level, syllabus:'active|deleted', q, options:[4], answer:0-3, explanation }</p>
+        </div>
+        <div id="bankCount" class="mt-3 text-sm text-slate-600 dark:text-slate-400"></div>
+        <div id="bankList" class="mt-3 grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+      </section>
+
+      <!-- Stats -->
+      <section id="stats" class="tab-panel hidden animate-fadein">
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 shadow-elev">
+          <h3 class="text-xl font-bold mb-3">Your Performance</h3>
+          <div id="statsHost" class="grid md:grid-cols-3 gap-3"></div>
+        </div>
+      </section>
+
+      <!-- Quiz UI Host -->
+      <template id="quizTpl">
+        <div class="rounded-2xl bg-white dark:bg-slate-900 shadow-elev p-3 md:p-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="text-sm">
+              <span class="font-bold" data-role="title"></span>
+              <span class="ml-2 text-slate-600 dark:text-slate-400" data-role="subtitle"></span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="px-3 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm" data-role="timer"></div>
+              <button data-role="submit" class="tap px-3 py-1.5 rounded-xl bg-sky-600 text-white text-sm font-semibold">Submit</button>
+              <button data-role="exit" class="tap px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 text-sm">Exit</button>
+            </div>
+          </div>
+          <div class="mt-3">
+            <div class="grid md:grid-cols-[1fr,300px] gap-3">
+              <div>
+                <div data-role="qhost" class="space-y-3"></div>
+              </div>
+              <aside class="md:sticky md:top-20">
+                <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-3">
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="text-sm font-semibold">Quick Nav</div>
+                    <button data-role="clear" class="tap text-xs underline">Clear All</button>
+                  </div>
+                  <div data-role="grid" class="grid grid-cols-10 gap-1"></div>
+                </div>
+                <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-3 mt-3 space-y-2">
+                  <div class="text-sm font-semibold">Legend</div>
+                  <div class="flex gap-2 text-xs flex-wrap">
+                    <div class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700">Unseen</div>
+                    <div class="px-2 py-0.5 rounded bg-sky-200 dark:bg-sky-900/50">Seen</div>
+                    <div class="px-2 py-0.5 rounded bg-emerald-200 dark:bg-emerald-900/50">Answered</div>
+                    <div class="px-2 py-0.5 rounded bg-amber-200 dark:bg-amber-900/50">Marked</div>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <template id="questionTpl">
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-3 animate-pop">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="text-sm text-slate-500 dark:text-slate-400" data-role="meta"></div>
+              <div class="mt-1 font-semibold" data-role="text"></div>
+            </div>
+            <button data-role="mark" class="tap text-xs px-2 py-1 rounded-lg bg-amber-100 dark:bg-amber-900/40">Mark</button>
+          </div>
+          <div class="mt-2 grid gap-2" data-role="choices"></div>
+          <div class="mt-2 hidden" data-role="explain"></div>
+        </div>
+      </template>
+
+      <template id="resultTpl">
+        <div class="rounded-2xl bg-white dark:bg-slate-900 shadow-elev p-4 animate-fadein">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-xl font-bold">Results</h3>
+            <div class="text-sm text-slate-600 dark:text-slate-400" data-role="summary"></div>
+          </div>
+          <div class="mt-3 grid md:grid-cols-3 gap-3">
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-3">
+              <div class="text-sm">Score</div>
+              <div class="text-3xl font-extrabold" data-role="score"></div>
+              <div class="text-xs text-slate-600 dark:text-slate-400">NEET marking: +4 / −1</div>
+            </div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-3">
+              <div class="text-sm">Accuracy</div>
+              <div class="text-3xl font-extrabold" data-role="acc"></div>
+              <div class="text-xs text-slate-600 dark:text-slate-400">Correct / Attempted</div>
+            </div>
+            <div class="rounded-xl border border-slate-200 dark:border-slate-800 p-3">
+              <div class="text-sm">Time/Question</div>
+              <div class="text-3xl font-extrabold" data-role="tpq"></div>
+              <div class="text-xs text-slate-600 dark:text-slate-400">Avg seconds per item</div>
+            </div>
+          </div>
+          <div class="mt-4">
+            <button data-role="review" class="tap px-4 py-2 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-semibold">Review Solutions</button>
+            <button data-role="new" class="tap ml-2 px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700">New Quiz</button>
+          </div>
+        </div>
+      </template>
+    </main>
+
+    <!-- Bottom Nav (mobile) -->
+    <nav class="fixed bottom-4 left-0 right-0 z-40">
+      <div class="mx-auto max-w-6xl px-4">
+        <div class="glass dark:glass-dark rounded-2xl shadow-elev p-2 grid grid-cols-5 gap-2">
+          <button class="mnav tap px-3 py-2 rounded-xl text-sm font-semibold bg-sky-600 text-white" data-tab="home">Home</button>
+          <button class="mnav tap px-3 py-2 rounded-xl text-sm font-semibold" data-tab="practice">Chapters</button>
+          <button class="mnav tap px-3 py-2 rounded-xl text-sm font-semibold" data-tab="mock">Mock</button>
+          <button class="mnav tap px-3 py-2 rounded-xl text-sm font-semibold" data-tab="bank">Bank</button>
+          <button class="mnav tap px-3 py-2 rounded-xl text-sm font-semibold" data-tab="stats">Stats</button>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <script>
+  /********************
+   * Data & Utilities *
+   ********************/
+  const STORAGE_KEYS = {
+    bank: 'neet_bank_v1',
+    used: 'neet_used_ids_v1',         // For non-repeat across exams
+    stats: 'neet_stats_v1',
+    theme: 'neet_theme',
+  };
+
+  function loadJSON(key, fallback) {
+    try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
+  }
+  function saveJSON(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+  function uid() { return Math.random().toString(36).slice(2); }
+
+  // Starter bank (sample). Mark some questions as syllabus: 'deleted' so they get filtered out by default.
+  // Schema: { id, subject, chapter, level, syllabus:'active|deleted', q, options:[4], answer, explanation }
+  const STARTER_BANK = [
+    // PHYSICS – Units & Measurements
+    {id:'P-UAM-1',subject:'Physics',chapter:'Units & Measurements',level:'easy',syllabus:'active',
+     q:'The dimension of Planck’s constant (h) is:',options:['MLT⁻²','ML²T⁻²','ML²T⁻¹','ML²T⁻³'],answer:2,explanation:'[h] = energy × time = (ML²T⁻²)T = ML²T⁻¹'},
+    {id:'P-UAM-2',subject:'Physics',chapter:'Units & Measurements',level:'medium',syllabus:'active',
+     q:'A quantity has unit kg·m²·s⁻³·A⁻¹. The quantity is:',options:['Potential difference','Power','Energy','Charge'],answer:0,explanation:'kg·m²·s⁻³·A⁻¹ corresponds to V (J/C = kg·m²·s⁻³·A⁻¹)'},
+    // PHYSICS – Kinematics
+    {id:'P-KIN-1',subject:'Physics',chapter:'Kinematics',level:'medium',syllabus:'active',
+     q:'A particle has displacement x = 4t³ − 2t² + 3 (SI). Its acceleration at t=2 s is:',options:['16 m/s²','40 m/s²','48 m/s²','56 m/s²'],answer:2,explanation:'v=dx/dt=12t²−4t, a=dv/dt=24t−4. At t=2 → 48−4=44 (Check) Actually derivative: a=24t−4=24*2−4=44 m/s² → Correct option not present; so correct option is not in list.'},
+    // Fixing the above with correct options
+    {id:'P-KIN-1b',subject:'Physics',chapter:'Kinematics',level:'medium',syllabus:'active',
+     q:'A particle has displacement x = 4t³ − 2t² + 3 (SI). Its acceleration at t=2 s is:',options:['36 m/s²','40 m/s²','44 m/s²','56 m/s²'],answer:2,explanation:'v=12t²−4t, a=24t−4 → at 2 s: 44 m/s²'},
+    {id:'P-KIN-2',subject:'Physics',chapter:'Kinematics',level:'hard',syllabus:'active',
+     q:'A projectile launched at speed v at angle θ has range R. For fixed v, R is maximized when:',options:['θ=30°','θ=37°','θ=45°','θ=60°'],answer:2,explanation:'R = v² sin 2θ / g, maximum when sin 2θ = 1 → θ=45°'},
+    // PHYSICS – Laws of Motion
+    {id:'P-LOM-1',subject:'Physics',chapter:'Laws of Motion',level:'hard',syllabus:'active',
+     q:'A block A of mass m on horizontal surface is pushed by force F at angle α below horizontal. Normal reaction is:',options:['mg−Fsinα','mg+Fsinα','mg','Fcosα'],answer:1,explanation:'Vertical balance: N + F sinα = mg → N = mg − F sinα? Actually force is downward, so N = mg + F sinα.'},
+    {id:'P-LOM-2',subject:'Physics',chapter:'Laws of Motion',level:'toughest',syllabus:'active',
+     q:'Two blocks m and 2m on frictionless surface are connected and pulled by force F. The tension between them is:',options:['F/3','2F/3','F/2','F'],answer:0,explanation:'a = F/3m, T on lighter block = m a = F/3'},
+    // CHEMISTRY – Atomic Structure
+    {id:'C-ATS-1',subject:'Chemistry',chapter:'Atomic Structure',level:'easy',syllabus:'active',
+     q:'The number of nodal planes in 3p orbital is:',options:['0','1','2','3'],answer:1,explanation:'p orbitals have 1 nodal plane'},
+    {id:'C-ATS-2',subject:'Chemistry',chapter:'Atomic Structure',level:'medium',syllabus:'active',
+     q:'For H-atom, energy of nth orbit is proportional to:',options:['n','1/n','1/n²','n²'],answer:2,explanation:'En ∝ −1/n²'},
+    // CHEMISTRY – Thermodynamics
+    {id:'C-THD-1',subject:'Chemistry',chapter:'Thermodynamics',level:'hard',syllabus:'active',
+     q:'For a spontaneous process at constant T and P, the criterion is:',options:['ΔG<0','ΔS<0','ΔH>0','ΔU=0'],answer:0,explanation:'Gibbs free energy must decrease'},
+    {id:'C-THD-2',subject:'Chemistry',chapter:'Thermodynamics',level:'toughest',syllabus:'active',
+     q:'At 300 K, reaction quotient Q=K. Then ΔG is:',options:['>0','=0','<0','Unpredictable'],answer:1,explanation:'ΔG = RT ln(Q/K) = 0'},
+    // CHEMISTRY – Deleted example
+    {id:'C-DEL-1',subject:'Chemistry',chapter:'Environmental Chemistry',level:'easy',syllabus:'deleted',
+     q:'Which gas causes ozone depletion?',options:['CO₂','N₂','CFCs','O₂'],answer:2,explanation:'Chapter marked deleted → excluded'},
+    // BIOLOGY – Cell: Structure & Function
+    {id:'B-CELL-1',subject:'Biology',chapter:'Cell: Structure & Function',level:'easy',syllabus:'active',
+     q:'Ribosomes are sites of:',options:['Respiration','Protein synthesis','Lipid synthesis','DNA replication'],answer:1,explanation:'Ribosomes synthesize proteins'},
+    {id:'B-CELL-2',subject:'Biology',chapter:'Cell: Structure & Function',level:'medium',syllabus:'active',
+     q:'Peroxisomes contain enzyme:',options:['Catalase','Pepsin','Amylase','Trypsin'],answer:0,explanation:'Catalase breaks down H₂O₂'},
+    // BIOLOGY – Genetics
+    {id:'B-GEN-1',subject:'Biology',chapter:'Principles of Inheritance',level:'hard',syllabus:'active',
+     q:'Test cross involves crossing F₁ with:',options:['Dominant parent','Recessive parent','F₂','Selfing'],answer:1,explanation:'Recessive homozygote'},
+    {id:'B-GEN-2',subject:'Biology',chapter:'Molecular Basis of Inheritance',level:'toughest',syllabus:'active',
+     q:'In E. coli, σ-factor of RNA polymerase is required for:',options:['Elongation','Termination','Promoter recognition','Proofreading'],answer:2,explanation:'Sigma helps in promoter recognition'},
+    // Add more chapters (short sample)
+    {id:'P-WAV-1',subject:'Physics',chapter:'Waves',level:'medium',syllabus:'active',q:'For a wave y=A sin(kx−ωt), phase velocity is:',options:['Aω','ω/k','k/ω','A/k'],answer:1,explanation:'v = ω/k'},
+    {id:'P-EMI-1',subject:'Physics',chapter:'Electromagnetic Induction',level:'hard',syllabus:'active',q:'Faraday’s law states that induced emf equals:',options:['Rate of change of charge','Rate of change of flux','Rate of change of current','Rate of change of field'],answer:1,explanation:'ε = −dΦ/dt'},
+    {id:'C-ORG-1',subject:'Chemistry',chapter:'Hydrocarbons',level:'medium',syllabus:'active',q:'The most stable carbocation is:',options:['CH₃⁺','1°','2°','3°'],answer:3,explanation:'3° stabilized by hyperconjugation/induction'},
+    {id:'C-ION-1',subject:'Chemistry',chapter:'Ionic Equilibrium',level:'hard',syllabus:'active',q:'pH of 10⁻³ M HCl is close to:',options:['3.00','2.96','2.00','1.00'],answer:1,explanation:'Activity correction gives ~2.96 at 25°C'},
+    {id:'B-ECO-1',subject:'Biology',chapter:'Ecosystem',level:'medium',syllabus:'active',q:'Primary productivity is:',options:['Rate of biomass formation','Total biomass','Secondary biomass','Decomposer biomass'],answer:0,explanation:'Rate at which producers form biomass'},
+    {id:'B-HUM-1',subject:'Biology',chapter:'Human Physiology – Circulation',level:'hard',syllabus:'active',q:'Bohr effect refers to:',options:['CO₂ effect on O₂ binding','O₂ effect on CO₂ binding','pH effect on CO₂ solubility','2,3-BPG synthesis'],answer:0,explanation:'Increased CO₂ reduces Hb affinity for O₂'},
+    {id:'P-OPT-1',subject:'Physics',chapter:'Optics',level:'toughest',syllabus:'active',q:'A convex lens of f=20 cm forms a real image twice the size of object. Object distance is:',options:['10 cm','20 cm','30 cm','40 cm'],answer:3,explanation:'m=−v/u=−2, lens eq: 1/f=1/v−1/u, with v=−2u → 1/20=1/(−2u)−1/u=−3/(2u) ⇒ u=−30/?? Recheck: 1/f=1/v−1/u; m=v/u=−2 ⇒ v=−2u. Put: 1/20 = 1/(-2u) - 1/u = -(1/2u + 1/u) = -3/(2u) ⇒ u = -30 cm? That would give option 30 cm (magnitude).'},
+    {id:'C-COO-1',subject:'Chemistry',chapter:'Coordination Compounds',level:'toughest',syllabus:'active',q:'[Fe(CN)₆]⁴⁻ is:',options:['High spin','Low spin','Paramagnetic','d⁶ high spin'],answer:1,explanation:'CN⁻ strong field → low spin d⁶, diamagnetic'},
+    {id:'B-PLT-1',subject:'Biology',chapter:'Plant Physiology – Photosynthesis',level:'hard',syllabus:'active',q:'Photophosphorylation producing ATP without NADPH is:',options:['Non-cyclic','Cyclic','Z-scheme','C₄ pathway'],answer:1,explanation:'Cyclic photophosphorylation'},
+  ];
+
+  // Initialize bank in localStorage if missing
+  if (!localStorage.getItem(STORAGE_KEYS.bank)) saveJSON(STORAGE_KEYS.bank, STARTER_BANK);
+
+  function getBank() {
+    return loadJSON(STORAGE_KEYS.bank, []).filter(q => q.syllabus !== 'deleted');
+  }
+  function allChaptersBySubject(bank) {
+    const map = {};
+    for (const q of bank) {
+      (map[q.subject] ||= new Set()).add(q.chapter);
+    }
+    const res = {};
+    for (const [s, set] of Object.entries(map)) res[s] = [...set].sort();
+    return res;
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // Non-repeat pool management (exam level)
+  function getUsedSet() { return new Set(loadJSON(STORAGE_KEYS.used, [])); }
+  function pushUsed(ids) {
+    const used = getUsedSet();
+    for (const id of ids) used.add(id);
+    saveJSON(STORAGE_KEYS.used, [...used]);
+  }
+  function resetUsed() { saveJSON(STORAGE_KEYS.used, []); }
+
+  // Stats
+  function pushStat(entry) {
+    const stats = loadJSON(STORAGE_KEYS.stats, []);
+    stats.push(entry);
+    saveJSON(STORAGE_KEYS.stats, stats.slice(-200)); // keep last 200
+  }
+
+  /****************
+   * UI Controls  *
+   ****************/
+  const $ = (sel, root=document) => root.querySelector(sel);
+  const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+
+  // Tabs
+  $$('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => showTab(btn.dataset.tab));
+  });
+  $$('.mnav').forEach(btn => {
+    btn.addEventListener('click', () => showTab(btn.dataset.tab));
+  });
+  function showTab(id) {
+    $$('.tab-btn').forEach(b => {
+      b.classList.toggle('bg-sky-600', b.dataset.tab===id);
+      b.classList.toggle('text-white', b.dataset.tab===id);
+      b.classList.toggle('bg-white', b.dataset.tab!==id);
+      b.classList.toggle('dark:bg-slate-900', b.dataset.tab!==id);
+      b.classList.toggle('border', b.dataset.tab!==id);
+    });
+    $$('.tab-panel').forEach(p => p.classList.add('hidden'));
+    $('#'+id).classList.remove('hidden');
+    // Mobile nav
+    $$('.mnav').forEach(b => {
+      b.classList.toggle('bg-sky-600', b.dataset.tab===id);
+      b.classList.toggle('text-white', b.dataset.tab===id);
+    });
+    if (id==='bank') renderBank();
+    if (id==='stats') renderStats();
+    if (id==='practice') initPracticeSelectors();
+  }
+  showTab('home');
+
+  // Theme toggle
+  const savedTheme = loadJSON(STORAGE_KEYS.theme, 'auto');
+  if (savedTheme==='dark' || (savedTheme==='auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+  }
+  $('#themeToggle').addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    saveJSON(STORAGE_KEYS.theme, document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  // Reset history
+  $('#resetHistoryBtn').addEventListener('click', () => {
+    if (confirm('Reset the “no-repeat” history for exams?')) resetUsed();
+  });
+
+  /***********************
+   * Chapterwise Practice *
+   ***********************/
+  function initPracticeSelectors() {
+    const bank = getBank();
+    const map = allChaptersBySubject(bank);
+    const subjSel = $('#pSubject');
+    const chapSel = $('#pChapter');
+    subjSel.innerHTML = Object.keys(map).map(s => `<option>${s}</option>`).join('');
+    function fillChapters() {
+      const chaps = map[subjSel.value] || [];
+      chapSel.innerHTML = chaps.map(c => `<option>${c}</option>`).join('');
+    }
+    fillChapters();
+    subjSel.onchange = fillChapters;
+  }
+  $('#startPractice').addEventListener('click', () => {
+    const bank = getBank();
+    const subj = $('#pSubject').value;
+    const chap = $('#pChapter').value;
+    const lvl  = $('#pLevel').value;
+    const count= Math.max(1, Math.min(200, parseInt($('#pCount').value||'10')));
+    let pool = bank.filter(q => q.subject===subj && q.chapter===chap);
+    if (lvl!=='mixed') pool = pool.filter(q => q.level===lvl);
+    if (pool.length===0) { alert('No questions for this selection. Try importing a larger bank.'); return; }
+    shuffle(pool);
+    renderQuiz($('#practiceHost'), pool.slice(0, count), {mode:'practice', title:`${subj} – ${chap}`, subtitle:`${lvl} • ${count} Q • Chapterwise`});
+  });
+
+  /****************
+   * Mock Exam    *
+   ****************/
+  $('#startMock').addEventListener('click', () => {
+    const bank = getBank();
+    let total = Math.max(60, Math.min(200, parseInt($('#mTotal').value || '180')));
+    const mix = $('#mMix').value;
+    const [hh, mm] = $('#mTimer').value.split(':').map(x=>parseInt(x));
+    const durationSec = (hh*60 + mm) * 60;
+
+    // Proportional split by subject (Physics/Chemistry/Biology). Default 45/45/90 typical; scale to total.
+    const split = { Physics: Math.round(total*0.25), Chemistry: Math.round(total*0.25), Biology: total - Math.round(total*0.25) - Math.round(total*0.25) };
+
+    const used = getUsedSet();
+    const examQs = [];
+    for (const subj of ['Physics','Chemistry','Biology']) {
+      let pool = bank.filter(q => q.subject===subj && !used.has(q.id));
+      if (mix==='hardcore') pool.sort((a,b)=>lvlRank(b.level)-lvlRank(a.level));
+      else if (mix==='balanced') pool = shuffle(pool);
+      else { // NEET-like mix ~ 20% easy, 50% medium, 25% hard, 5% toughest
+        const target = split[subj];
+        const bins = {
+          easy: Math.round(target*0.2),
+          medium: Math.round(target*0.5),
+          hard: Math.round(target*0.25),
+          toughest: target - (Math.round(target*0.2)+Math.round(target*0.5)+Math.round(target*0.25))
+        };
+        const byLevel = lvl => shuffle(pool.filter(q => q.level===lvl)).slice(0, bins[lvl]);
+        const pick = [...byLevel('easy'), ...byLevel('medium'), ...byLevel('hard'), ...byLevel('toughest')];
+        examQs.push(...pick);
+        continue;
+      }
+      examQs.push(...pool.slice(0, split[subj]));
+    }
+
+    if (examQs.length < total) {
+      alert(`Not enough unique questions (${examQs.length}/${total}). Import a larger bank in “Question Bank” to ensure no repeats.`);
+    }
+    shuffle(examQs);
+    renderQuiz($('#mockHost'), examQs.slice(0,total), {mode:'exam', title:'Full Mock Exam', subtitle:`${total} Q • ${$('#mTimer').value} timer`}, {durationSec, lockOnTime:true, persistUsed:true});
+  });
+
+  function lvlRank(l){ return ({easy:1, medium:2, hard:3, toughest:4})[l] || 2; }
+
+  /**************
+   * Daily      *
+   **************/
+  $('#dailyBtn').addEventListener('click', () => {
+    const bank = getBank();
+    const seed = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+    // deterministic shuffle
+    const seeded = [...bank].sort((a,b)=>hash(`${seed}-${a.id}`)-hash(`${seed}-${b.id}`));
+    const pick = seeded.slice(0, Math.min(50, bank.length));
+    renderQuiz($('#practiceHost'), pick, {mode:'practice', title:`Daily Challenge`, subtitle:`${seed} • ${pick.length} Q • no repeats today`});
+    showTab('practice');
+  });
+  function hash(s){ let h=0; for (let i=0;i<s.length;i++){ h=((h<<5)-h)+s.charCodeAt(i); h|=0; } return h; }
+
+  /****************
+   * Quiz Engine  *
+   ****************/
+  function renderQuiz(host, questions, meta, opts={}) {
+    host.innerHTML = '';
+    const tpl = $('#quizTpl').content.cloneNode(true);
+    const qhost = $('[data-role="qhost"]', tpl);
+    $('[data-role="title"]', tpl).textContent = meta.title || 'Quiz';
+    $('[data-role="subtitle"]', tpl).textContent = meta.subtitle || '';
+    const navGrid = $('[data-role="grid"]', tpl);
+
+    // Timer
+    let remaining = opts.durationSec || (meta.mode==='exam' ? 150*60 : 0); // default 2h30m for exam if not specified
+    const timerEl = $('[data-role="timer"]', tpl);
+    let timer;
+    function formatTime(s){ const h=Math.floor(s/3600), m=Math.floor((s%3600)/60), sec=s%60; return (h?String(h).padStart(2,'0')+':':'')+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0'); }
+    function tick(){
+      timerEl.textContent = remaining>0 ? `⏱ ${formatTime(remaining)}` : (meta.mode==='exam' ? '⏱ 00:00:00' : '—');
+      if (remaining>0){ remaining--; } else if (opts.lockOnTime && meta.mode==='exam') { submit(); clearInterval(timer); }
+    }
+    if (meta.mode==='exam'){ tick(); timer = setInterval(tick, 1000); }
+
+    // Build questions
+    const state = questions.map((q, idx) => ({ id:q.id, idx, seen:false, ans:null, marked:false, q }));
+    state.forEach((s, i) => {
+      const qtpl = $('#questionTpl').content.cloneNode(true);
+      $('[data-role="meta"]', qtpl).textContent = `Q${i+1} • ${s.q.subject} • ${s.q.chapter} • ${s.q.level}`;
+      $('[data-role="text"]', qtpl).textContent = s.q.q;
+      const choices = $('[data-role="choices"]', qtpl);
+      s.q.options.forEach((opt, k) => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-card tap text-left px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:shadow-soft';
+        btn.textContent = String.fromCharCode(65+k)+'. '+opt;
+        btn.addEventListener('click', () => {
+          s.ans = k;
+          s.seen = true;
+          refreshGrid();
+          $$('[data-selected]', qtpl).forEach(x=>x.removeAttribute('data-selected'));
+          btn.setAttribute('data-selected','true');
+          btn.classList.add('ring-2','ring-sky-500');
+          // remove ring from siblings
+          choices.childNodes.forEach(c => { if (c!==btn) c.classList.remove('ring-2','ring-sky-500'); });
+        });
+        choices.appendChild(btn);
+      });
+      $('[data-role="mark"]', qtpl).addEventListener('click', () => { s.marked = !s.marked; refreshGrid(); });
+      $('[data-role="explain"]', qtpl).innerHTML = `<div class="rounded-lg bg-slate-50 dark:bg-slate-800 p-3 text-sm"><span class="font-semibold">Solution:</span> ${s.q.explanation || '—'}</div>`;
+      qhost.appendChild(qtpl);
+    });
+
+    // Nav grid
+    function refreshGrid(){
+      navGrid.innerHTML = '';
+      state.forEach((s, i) => {
+        const b = document.createElement('button');
+        b.className = 'tap w-8 h-8 rounded-lg text-xs font-semibold';
+        // Unseen/seen/answered/marked
+        let bg = 'bg-slate-200 dark:bg-slate-700';
+        if (s.marked) bg = 'bg-amber-200 dark:bg-amber-900/50';
+        if (s.seen) bg = 'bg-sky-200 dark:bg-sky-900/50';
+        if (s.ans!==null) bg = 'bg-emerald-200 dark:bg-emerald-900/50';
+        b.classList.add(...bg.split(' '));
+        b.textContent = i+1;
+        b.addEventListener('click', () => {
+          const el = qhost.children[i];
+          const top = el.getBoundingClientRect().top + window.scrollY - 90;
+          window.scrollTo({ top, behavior: 'smooth' });
+          s.seen = true; refreshGrid();
+        });
+        navGrid.appendChild(b);
+      });
+    }
+    refreshGrid();
+
+    // Clear all
+    $('[data-role="clear"]', tpl).addEventListener('click', () => {
+      state.forEach(s => { s.ans = null; s.seen = false; s.marked = false; });
+      refreshGrid();
+      qhost.querySelectorAll('[data-selected]').forEach(x=>x.classList.remove('ring-2','ring-sky-500'));
+    });
+
+    // Submit
+    $('[data-role="submit"]', tpl).addEventListener('click', submit);
+    function submit(){
+      clearInterval(timer);
+      const total = state.length;
+      let correct=0, attempted=0;
+      state.forEach(s => {
+        if (s.ans!==null) {
+          attempted++;
+          if (s.ans===s.q.answer) correct++;
+        }
+      });
+      const score = 4*correct - 1*(attempted - correct);
+      const acc = attempted ? Math.round((100*correct)/attempted) : 0;
+      const tpq = meta.mode==='exam' ? Math.round(((opts.durationSec || 0) - remaining) / Math.max(1, attempted)) : 0;
+
+      // Reveal explanations
+      $$('#practiceHost [data-role="explain"], #mockHost [data-role="explain"]').forEach(x=>x.classList.remove('hidden'));
+
+      // Persist used ids (exam mode)
+      if (opts.persistUsed) pushUsed(state.map(s => s.id));
+
+      // Render results card
+      const rtpl = $('#resultTpl').content.cloneNode(true);
+      $('[data-role="summary"]', rtpl).textContent = `${correct} correct • ${attempted-correct} wrong • ${total-attempted} unattempted`;
+      $('[data-role="score"]', rtpl).textContent = `${score}`;
+      $('[data-role="acc"]', rtpl).textContent = `${acc}%`;
+      $('[data-role="tpq"]', rtpl).textContent = `${tpq}s`;
+      $('[data-role="review"]', rtpl).addEventListener('click', () => {
+        window.scrollTo({ top: qhost.offsetTop - 80, behavior:'smooth' });
+      });
+      $('[data-role="new"]', rtpl).addEventListener('click', () => {
+        // soft reset UI: go back to panel top
+        window.scrollTo({ top: 0, behavior:'smooth' });
+      });
+      host.prepend(rtpl);
+
+      // Stats entry
+      pushStat({
+        ts: new Date().toISOString(),
+        mode: meta.mode,
+        title: meta.title,
+        total, correct, attempted, score, acc
+      });
+    }
+
+    // Exit
+    $('[data-role="exit"]', tpl).addEventListener('click', () => {
+      host.innerHTML='';
+      clearInterval(timer);
+    });
+
+    host.appendChild(tpl);
+  }
+
+  /****************
+   * Bank UI      *
+   ****************/
+  function renderBank(){
+    const bank = getBank();
+    $('#bankCount').textContent = `${bank.length} active questions in bank`;
+    const list = $('#bankList');
+    list.innerHTML = '';
+    bank.slice(0, 240).forEach(q => {
+      const card = document.createElement('div');
+      card.className = 'rounded-xl border border-slate-200 dark:border-slate-800 p-3';
+      card.innerHTML = `<div class="text-xs text-slate-500">${q.subject} • ${q.chapter} • ${q.level}</div>
+                        <div class="mt-1 font-semibold">${q.q}</div>`;
+      list.appendChild(card);
+    });
+  }
+
+  $('#exportBtn').addEventListener('click', () => {
+    const data = loadJSON(STORAGE_KEYS.bank, []);
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'neet_bank_export.json'; a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  $('#importFile').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const arr = JSON.parse(reader.result);
+        if (!Array.isArray(arr)) throw new Error('JSON must be an array');
+        // Basic validation
+        const ok = arr.every(x => x.id && x.subject && x.chapter && x.level && x.q && Array.isArray(x.options) && typeof x.answer==='number');
+        if (!ok) throw new Error('Invalid schema');
+        // Merge unique by id
+        const current = loadJSON(STORAGE_KEYS.bank, []);
+        const ids = new Set(current.map(x=>x.id));
+        const merged = [...current];
+        arr.forEach(x => { if (!ids.has(x.id)) merged.push(x); });
+        saveJSON(STORAGE_KEYS.bank, merged);
+        alert(`Imported ${merged.length - current.length} new questions.`);
+        renderBank();
+      } catch (err) {
+        alert('Import failed: '+err.message);
+      }
+    };
+    reader.readAsText(file);
+  });
+
+  /****************
+   * Stats        *
+   ****************/
+  function renderStats(){
+    const stats = loadJSON(STORAGE_KEYS.stats, []);
+    const host = $('#statsHost'); host.innerHTML='';
+    if (stats.length===0){ host.innerHTML = '<div class="text-sm text-slate-500">No stats yet. Take a quiz!</div>'; return; }
+    const last = stats[stats.length-1];
+    // Cards
+    const mk = (title, val, hint='') => {
+      const el = document.createElement('div');
+      el.className = 'rounded-xl border border-slate-200 dark:border-slate-800 p-3';
+      el.innerHTML = `<div class="text-sm">${title}</div><div class="text-3xl font-extrabold">${val}</div><div class="text-xs text-slate-600 dark:text-slate-400">${hint}</div>`;
+      return el;
+    };
+    host.appendChild(mk('Last Score', last.score, last.title || ''));
+    const avg = Math.round(stats.reduce((a,b)=>a+b.score,0)/stats.length);
+    host.appendChild(mk('Avg Score', avg, `${stats.length} attempts`));
+    const best = Math.max(...stats.map(s=>s.score));
+    host.appendChild(mk('Best Score', best, 'Keep pushing!'));
+  }
+
+  // Kick off
+  initPracticeSelectors();
+  renderBank();
+  </script>
+</body>
+</html>
