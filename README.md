@@ -14,3 +14,7 @@ Question Bank :
 
 Exam Section with Multiple Choice Questions With Neet model of timing and Score System :
 <img width="1841" height="868" alt="Screenshot 2025-08-15 154106" src="https://github.com/user-attachments/assets/8f2ca47b-224e-4b95-b353-07853e2b56f8" />
+
+Results :
+<img width="1836" height="862" alt="Screenshot 2025-08-15 154146" src="https://github.com/user-attachments/assets/4ab6f785-a204-41e7-8292-1901ae4e1045" />
+
